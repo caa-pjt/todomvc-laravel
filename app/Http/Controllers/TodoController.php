@@ -14,7 +14,8 @@ class TodoController extends Controller
      */
     public function index() :View
     {
-        $todos = Todo::all()->sortByDesc('created_at');
+        // $todos = Todo::all()->sortByDesc('created_at');
+        $todos = Todo::orderBy('created_at', 'desc')->get();
         return view('todo.index', ['todos' => $todos]);
     }
 
@@ -41,11 +42,13 @@ class TodoController extends Controller
     /**
      * Display the specified resource.
      */
+    /* 
     public function show(Todo $todo)
     {
         return Todo::find($todo);
         //return Todo::findOrFail($id);
-    }
+    } 
+    */
 
     /**
      * Show the form for editing the specified resource.

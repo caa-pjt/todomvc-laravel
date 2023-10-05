@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 }); */
 
 
-Route::resource('todos', TodoController::class); // ->except(['show'])
+Route::resource('todos', TodoController::class)->except(['show']);
 
 Route::get('/', function(){
     return redirect('todos');

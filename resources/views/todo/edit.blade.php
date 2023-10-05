@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', "Editer - $todo->title")
+
 @section('content')
 
 

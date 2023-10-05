@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', "Créer un nouveau Todo")
+
 @section('content')
 
 <div class="row">
