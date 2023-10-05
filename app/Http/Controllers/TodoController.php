@@ -33,7 +33,9 @@ class TodoController extends Controller
      */
     public function store(StoreTodoRequest $request)
     {
-        Todo::create($request->validated());
+ 
+        //Todo::create($request->validated());
+        Todo::create($request->all());
 
         return redirect()->route('todos.index')
         ->with('success', "Le todo à bien été sauveguardé");

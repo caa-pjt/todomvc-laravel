@@ -23,8 +23,8 @@ class StoreTodoRequest extends FormRequest
     {
         return [
             "title" => ["min:5", "required"],
-            "completed" => 'int'
-        ];
+            
+        ]; // "completed" => 'int'
     }
 
 

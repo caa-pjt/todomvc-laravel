@@ -2,11 +2,50 @@
 
 @section('content')
 
-<h1>Mes todos</h1>
+<header class="header">
+  <h1>todos</h1>
+  <form method="POST" action="{{ route('todos.store') }}">
+    <input class="new-todo" placeholder="Créer un nouveau todo ?" autofocus type="text" name="title">
+    <!-- CSRF Token / Methode -->
+    @csrf
+    @method('POST')
+  
+  </form>
+  {{-- <a class="new-todo" href="{{ url('todos/create') }}">Céer un nouveau todo</a> --}}
+</header>
 
-<a class="btn btn-primary" href="{{ url('todos/create') }}">Céer un nouveau todo</a>
+<section class="main">
+  <input id="toggle-all" class="toggle-all" type="checkbox">
+  <label for="toggle-all">Mark all as complete</label>
+  <ul class="todo-list">
+    @foreach ($todos as $todo)
+    <li class="">
+      <div class="view">
+        <input class="toggle" type="checkbox">
+        <label>{{ $todo->title }}</label>
+        <button class="destroy"></button>
+      </div>
+    </li>
+    @endforeach
+  </ul>
+</section>
+<footer class="footer">
+  <span class="todo-count"></span>
+  <ul class="filters">
+    <li>
+      <a href="#/" class="selected">All</a>
+    </li>
+    <li>
+      <a href="#/active">Active</a>
+    </li>
+    <li>
+      <a href="#/completed">Completed</a>
+    </li>
+  </ul>
+  <button class="clear-completed">Clear completed</button>
+</footer>
 
-<table>
+{{-- <table>
   <thead>
     <tr>
       <th>Id</th>
@@ -19,7 +58,7 @@
   <tbody>
     @foreach ($todos as $todo)
     <tr>
-      <td>{{ $todo->id }}</td>
+      <li>{{ $todo->id }}</li>
       <td>{{ $todo->created_at->format('Y-m-d') }}</td>
       <td>{{ $todo->title }}</td>
       <td><input class="form-check-input" type="checkbox" disabled  @if ($todo->completed === 1)
@@ -35,15 +74,15 @@
         </td>
       </tr>
 
-      {{-- <p>{{ $todo->title }} - <input class="form-check-input" type="checkbox"  @if ($todo->completed === 1)
-        checked
-        @endif id="flexCheckDefault"></p> --}}
 
         @endforeach
 
   </tbody>
-</table>
+</table> --}}
 
+      {{-- <p>{{ $todo->title }} - <input class="form-check-input" type="checkbox"  @if ($todo->completed === 1)
+        checked
+        @endif id="flexCheckDefault"></p> --}}
 {{-- @dump($todos) --}}
       
 @endsection
