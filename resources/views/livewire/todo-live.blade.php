@@ -12,7 +12,7 @@
         <label for="toggle-all">Mark all as complete</label>
         <ul class="todo-list">
             @foreach ($todos as $todo)
-            <li class="@if($todo->completed === 1) completed @endif">
+            <li class="@if($todo->completed === 1) completed @endif" wire:key='{{ $todo->id }}'>
                 <div class="view">
                     <input class="toggle" type="checkbox" @if ($todo->completed === 1)
                     checked

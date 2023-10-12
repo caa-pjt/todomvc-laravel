@@ -18,7 +18,7 @@ class TodoLive extends Component
     ];
 
     // number of not finished todos
-    public int $countTodosLeft;
+    public int|null $countTodosLeft = null;
     public int|null $numberOfTodos = null;
 
     // Search query
@@ -29,7 +29,7 @@ class TodoLive extends Component
         'search' => ['except' => '', 'as' => 's'],
     ];
 
-    // Search valuea admited
+    // Allowed values
     protected $searchValues = [
         "active" => 0,
         "completed" => 1
@@ -42,10 +42,9 @@ class TodoLive extends Component
     public function mount(){
         // Get Todos from DB
         $this->getTodos($this->search); 
-        // Count todos not finished
-        //$this->countItemsLeft($this->todos);
     }
-    
+
+
     /**
      * getTodos // Search todo where condition
      *
@@ -68,10 +67,13 @@ class TodoLive extends Component
             $this->numberOfTodos = count($todos);
         }
         
+        // Init variable nombre total de todos
         if(is_null($this->numberOfTodos)){
             $this->numberOfTodos = count(Todo::all());
         }
-        $this->countItemsLeft($todos);
+
+        // Init variable nombre total de todos nom terminés
+        is_null($this->countTodosLeft) ? $this->countItemsLeft($todos) : null;
 
         return $this->todos = $todos;
         
@@ -84,11 +86,18 @@ class TodoLive extends Component
      * @param  mixed $todos
      * @return Int number of filtred todos 
      */
-    public function countItemsLeft($todos) : Int {
-        $items = $todos->filter(function($todo){
+    public function countItemsLeft($todos) : int {
+        /* $items = $todos->filter(function($todo){
             return $todo->completed === 0 ?? $todo;
         });
-        return $this->countTodosLeft = count($items);
+        return $this->countTodosLeft = count($items); */
+        $count = 0;
+        foreach($todos as $todo){
+            if ($todo->completed === 0) {
+                $count++;
+            }
+        }
+        return $this->countTodosLeft = $count;
     }
 
     
@@ -141,7 +150,9 @@ class TodoLive extends Component
         if($todo->id === null){
             Todo::where('completed', 1)->delete();
         }else{
-            Todo::find($todo->id)->delete();;
+            $todo = Todo::find($todo->id);
+            $todo->completed === 0 ? $this->countTodosLeft-- : null;
+            $todo->delete();
         }
 
         $this->getTodos();
