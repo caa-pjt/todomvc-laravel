@@ -22,22 +22,22 @@ class TodoLive extends Component
     public int|null $numberOfTodos = null;
 
     // Search query
-    public $search = '';
+    public string $search = '';
 
     // validation search query
-    protected $queryString = [
+    protected array $queryString = [
         'search' => ['except' => '', 'as' => 's'],
     ];
 
     // Allowed values
-    protected $searchValues = [
+    protected array $searchValues = [
         "active" => 0,
         "completed" => 1
     ];
 
 
     /**
-     * Load all todos when the app is loading..
+     * Get all todos when the app is loading..
      */
     public function mount(){
         // Get Todos from DB
@@ -81,7 +81,7 @@ class TodoLive extends Component
 
         
     /**
-     * Filter todos and return the number of todos arr not been completed
+     * Filter todos and return the number of todos are not been completed
      *
      * @param  mixed $todos
      * @return Int number of filtred todos 
@@ -120,7 +120,7 @@ class TodoLive extends Component
 
         
     /**
-     * update Todo
+     * update a Todo
      *
      * @param  mixed $id
      * @return void
@@ -141,7 +141,7 @@ class TodoLive extends Component
     }
 
     /**
-     * Delete a Todo from his id
+     * Delete a Todo from id
      *
      * @param  mixed $id
      * @return void

@@ -1,16 +1,18 @@
 <div>
     <header class="header">
         <h1>todos</h1>
+        <!-- Add todos to the db -->
         <form method="POST" wire:submit="store">
             <input class="new-todo" placeholder="Créer un nouveau todo ?" autofocus type="text" wire:model='title'>
         </form>
     </header>
-
+    <!-- check if have todos -->
     @if ($todos && $numberOfTodos > 0)
     <section class="main">
         <input id="toggle-all" class="toggle-all" type="checkbox">
         <label for="toggle-all">Mark all as complete</label>
         <ul class="todo-list">
+            <!-- List of Todos -->
             @foreach ($todos as $todo)
             <li class="@if($todo->completed === 1) completed @endif" wire:key='{{ $todo->id }}'>
                 <div class="view">
@@ -43,15 +45,23 @@
         @endif
     </footer>
     @endif 
+
     <script>
-        let links = document.querySelectorAll(".filters li a")
-        links.forEach(element => {
-            element.addEventListener('click', (event) => {
-                event.preventDefault()
-                const nouvelleURL = event.currentTarget.getAttribute("href")
-                console.log(nouvelleURL)
-                window.history.pushState({}, '', nouvelleURL);
-            })
+        /**
+         *  Détection de l'historique du changement de la page
+        */ 
+        window.addEventListener('popstate', function(event) {
+            console.log('Changement de page détecté ! Nouvelle URL : ' + document.location.href);
+            const filter = location.search
+            let link = ""
+            if(filter != ""){
+                link = document.querySelector(`[href="${filter}"]`)
+            } else {
+                link = document.querySelector("[href='/todos']")
+            }
+            if(link){
+                link.click()
+            }
         });
     </script>
 
