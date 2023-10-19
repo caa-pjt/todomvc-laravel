@@ -39,9 +39,10 @@ class TodoLive extends Component
     /**
      * Get all todos when the app is loading..
      */
-    public function mount(){
+    public function mount()
+    {
         // Get Todos from DB
-        $this->getTodos($this->search); 
+        $this->getTodos($this->search);
     }
 
 
@@ -51,24 +52,24 @@ class TodoLive extends Component
      * @param  mixed $param
      * @return Todo[]
      */
-    public function getTodos(string $param = '') {
+    public function getTodos(string $param = '')
+    {
 
         $this->search = $param;
-        
-        if(array_key_exists($this->search, $this->searchValues)){
+
+        if (array_key_exists($this->search, $this->searchValues)) {
 
             // dd($this->search, $this->searchValues, array_key_exists($this->search, $this->searchValues), $this->searchValues[$this->search]);
             $todos = $this->todos = Todo::where('completed', $this->searchValues[$this->search])
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        }else{
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } else {
             $todos = $this->todos = Todo::all()->sortByDesc('created_at');
             $this->numberOfTodos = count($todos);
         }
-        
+
         // Init variable nombre total de todos
-        if(is_null($this->numberOfTodos)){
+        if (is_null($this->numberOfTodos)) {
             $this->numberOfTodos = count(Todo::all());
         }
 
@@ -76,23 +77,23 @@ class TodoLive extends Component
         is_null($this->countTodosLeft) ? $this->countItemsLeft($todos) : null;
 
         return $this->todos = $todos;
-        
     }
 
-        
+
     /**
      * Filter todos and return the number of todos are not been completed
      *
      * @param  mixed $todos
      * @return Int number of filtred todos 
      */
-    public function countItemsLeft($todos) : int {
+    public function countItemsLeft($todos): int
+    {
         /* $items = $todos->filter(function($todo){
             return $todo->completed === 0 ?? $todo;
         });
         return $this->countTodosLeft = count($items); */
         $count = 0;
-        foreach($todos as $todo){
+        foreach ($todos as $todo) {
             if ($todo->completed === 0) {
                 $count++;
             }
@@ -100,14 +101,15 @@ class TodoLive extends Component
         return $this->countTodosLeft = $count;
     }
 
-    
+
     /**
      * store a new Todo in database
      *
      * @return void
      */
-    public function store() {
-        
+    public function store()
+    {
+
         $this->validate();
 
         Todo::create([
@@ -118,42 +120,53 @@ class TodoLive extends Component
         $this->getTodos();
     }
 
-        
+
     /**
      * update a Todo
      *
      * @param  mixed $id
      * @return void
      */
-    public function update(int $id){
+    public function update(int $id)
+    {
         $todo = Todo::findOrFail($id);
-        if($todo->completed === 0){
+        if ($todo->completed === 0) {
             $todo->completed = 1;
             $this->countTodosLeft--;
-        }else {
+        } else {
             $todo->completed = 0;
             $this->countTodosLeft++;
         }
         $todo->save();
 
-        $this->getTodos();
-
+        $this->getTodos($this->search);
     }
 
     /**
      * Delete a Todo from id
      *
-     * @param  mixed $id
+     * @param  mixed $todo
      * @return void
      */
-    public function destroy(Todo|null $todo = null){
-        if($todo->id === null){
-            Todo::where('completed', 1)->delete();
-        }else{
-            $todo = Todo::find($todo->id);
-            $todo->completed === 0 ? $this->countTodosLeft-- : null;
-            $todo->delete();
-        }
+    public function destroy(Todo $todo)
+    {
+
+        $todo = Todo::find($todo->id);
+        $todo->completed === 0 ? $this->countTodosLeft-- : null;
+        $todo->delete();
+
+        $this->getTodos();
+    }
+
+    /** 
+     * Delete list of completed todos
+     *
+     * @return void
+     */
+    public function destroyTodos()
+    {
+
+        Todo::where('completed', 1)->delete();
 
         $this->getTodos();
     }
@@ -165,5 +178,4 @@ class TodoLive extends Component
     {
         return view('livewire.todo-live', ["todos" => $this->todos, 'url' => $this->search]);
     }
-
 }

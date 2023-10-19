@@ -20,8 +20,9 @@
                     checked
                     @endif wire:click="update({{ $todo->id }})">
                     <label>{{ $todo->title }}</label>
-                    
-                    <button class="destroy" wire:loading.attr="disabled" wire:click.prevent="destroy({{ $todo }})"></button>
+
+                    <button class="destroy" wire:loading.attr="disabled"
+                        wire:click.prevent="destroy({{ $todo }})"></button>
                 </div>
             </li>
             @endforeach
@@ -31,20 +32,22 @@
         <span class="todo-count">{{ $countTodosLeft }} item left</span>
         <ul class="filters">
             <li>
-                <a href="/todos" @class(['selected' => $url === ""]) wire:click.prevent='getTodos()'>All</a> 
+                <a href="/" @class(['selected'=> $url === ""]) wire:click.prevent='getTodos()'>All</a>
             </li>
             <li>
-                <a href="?s=active" @class(['selected' => $url === "active"]) wire:click.prevent='getTodos("active")'>Active</a>
+                <a href="?s=active" @class(['selected'=> $url === "active"])
+                    wire:click.prevent='getTodos("active")'>Active</a>
             </li>
             <li>
-                <a href="?s=completed" @class(['selected' => $url === "completed"])  wire:click.prevent='getTodos("completed")'>Completed</a>
+                <a href="?s=completed" @class(['selected'=> $url === "completed"])
+                    wire:click.prevent='getTodos("completed")'>Completed</a>
             </li>
         </ul>
         @if ($todos && count($todos) > 0 && $numberOfTodos - $countTodosLeft > 0)
-        <button class="clear-completed" wire:click='destroy()'>Clear completed</button>
+        <button class="clear-completed" wire:click='destroyTodos()'>Clear completed</button>
         @endif
     </footer>
-    @endif 
+    @endif
 
     <script>
         /**
@@ -57,7 +60,7 @@
             if(filter != ""){
                 link = document.querySelector(`[href="${filter}"]`)
             } else {
-                link = document.querySelector("[href='/todos']")
+                link = document.querySelector("[href='/']")
             }
             if(link){
                 link.click()
