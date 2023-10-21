@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TodoApiController;
 use App\Http\Controllers\TodoController;
 use App\Http\Resources\TodoResource;
 use Illuminate\Support\Facades\Route;
@@ -22,9 +23,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('todos', TodoController::class)->except(['show']);
 
-Route::get('/', function(){
+Route::get('/', function () {
+
     return redirect('todos');
 });
+
+/* Route::get("/user", function () {
+    $u = App\Models\User::create([
+        "name" => "toto",
+        "email" => "caa@caa.ch",
+        "password" => "test"
+    ]);
+
+    // create token 
+
+    return $u;
+}); */
+
 
 // Route::get('/', [TodoController::class, 'index']);
 

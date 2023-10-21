@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TodoApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +15,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
+
+/* Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+}); */
+
+
+
+// composer require laravel/sanctum  
+// php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider" 
+
+Route::get('token', [TodoApiController::class, 'getToken']);
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::resource('todos', TodoApiController::class)->except(['show', 'create', 'edit']);
+});
