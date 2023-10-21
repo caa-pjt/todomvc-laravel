@@ -113,7 +113,7 @@ class TodoLive extends Component
         $this->validate();
 
         Todo::create([
-            "title" => $this->title
+            "title" => trim($this->title)
         ]);
         //$this->title = '';
         $this->reset();
