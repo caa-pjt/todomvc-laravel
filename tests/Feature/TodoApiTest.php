@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 
+use App\Models\Todo;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -32,6 +33,25 @@ class TodoApiTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_store_todo()
+    {
+        $this->login();
+
+        $data = [
+            "title" => "Mon todo",
+            "completed" => 0
+        ];
+
+        $response = $this->post("/api/todos", $data);
+
+        $response->assertStatus(200);
+
+        $response->assertJsonFragment([
+            "title" => "Mon todo",
+            "completed" => 0
+        ]);
+    }
+
     public function test_post_todo_logged_in(): void
     {
         $this->login();
@@ -44,7 +64,32 @@ class TodoApiTest extends TestCase
     public function test_post_update(): void
     {
         $this->login();
-        // TodoApiTest::store(["title" => "Test de title"]);
+
+        $todos = Todo::factory(1)->create();
+        $todo = $todos->first();
+
+        $data = [
+            "title" => "Nouveau titre"
+        ];
+
+        $response = $this->putJson("/api/todos/" . $todo->id, $data);
+
+        $response->assertStatus(200);
+
+        $response->assertJsonFragment([
+            "title" => "Nouveau titre"
+        ]);
+    }
+
+    public function test_finished_methode_return_completed_todos(): void
+    {
+        Todo::factory(2)->completed()->create();
+        Todo::factory(2)->create();
+
+        $response = $this->get('/api/completed');
+
+
+        $response->assertJsonCount(2);
     }
 
 

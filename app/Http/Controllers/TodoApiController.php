@@ -11,6 +11,7 @@ class TodoApiController extends Controller
     public function getToken()
     {
         $u = User::find(1);
+
         $token = $u->createToken('api');
         return response()->json($token);
     }
@@ -18,6 +19,11 @@ class TodoApiController extends Controller
     public function index()
     {
         return response()->json(Todo::all()->sortByDesc('created_at'));
+    }
+
+    public function finished()
+    {
+        return response()->json(Todo::where("completed", "=", 1)->get());
     }
 
     public function store(StoreTodoRequest $request)

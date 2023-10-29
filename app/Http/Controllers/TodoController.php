@@ -12,7 +12,7 @@ class TodoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() :View
+    public function index(): View
     {
         // $todos = Todo::all()->sortByDesc('created_at');
         $todos = Todo::orderBy('created_at', 'desc')->get();
@@ -33,12 +33,12 @@ class TodoController extends Controller
      */
     public function store(StoreTodoRequest $request)
     {
- 
+
         //Todo::create($request->validated());
         Todo::create($request->all());
 
         return redirect()->route('todos.index')
-        ->with('success', "Le todo à bien été sauveguardé");
+            ->with('success', "Le todo à bien été sauveguardé");
     }
 
     /**
@@ -65,10 +65,10 @@ class TodoController extends Controller
      */
     public function update(StoreTodoRequest $request, Todo $todo)
     {
-        
+
         $request->input('completed') ?? $request->merge(['completed' => 0]);
         $todo->update($request->all());
-        
+
         /* $completed = $request->input('completed') ?? 0;
         Todo::where('id', $todo->id)->update([
             'title' => $request->input('title'),
@@ -76,7 +76,7 @@ class TodoController extends Controller
         ]); */
 
         return redirect()->route('todos.index')
-        ->with('success', "Le todo à bien été sauveguardé");
+            ->with('success', "Le todo à bien été sauveguardé");
     }
 
     /**
@@ -87,6 +87,6 @@ class TodoController extends Controller
         //Todo::where('id', $todo->id)->delete();
         $todo->delete();
         return redirect()->route('todos.index')
-        ->with('success', "Le todo à bien été supprimé");
+            ->with('success', "Le todo à bien été supprimé");
     }
 }
